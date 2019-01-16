@@ -1,0 +1,2 @@
+class QuestionAccess < ApplicationRecord
+end
