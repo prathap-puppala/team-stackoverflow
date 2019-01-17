@@ -1,0 +1,31 @@
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+	<div class="row">
+		<div class="span6">
+            <%= form_for(@answer, :url => url_for(:controller => 'answers', :action => 'create')) do |f| %>
+            <% if @answer.errors.any? %>
+                <div>
+                    <h2><%= pluralize(@answer.errors.count,"error") %> will be prohibited to save in database</h2>
+                    <ul>
+                        <% @answer.errors.full_messages.each do |msg| %>
+                        <li><%= msg %></li>
+                    </ul>
+                    <% end %>
+                    <% end %>
+                <div class="controls controls-row">
+                    <%= f.label :Question %>
+                    <%= @question.description %>
+                	<br><br>
+                    <%= f.label :Answer %><br>
+                    <%= f.text_field :description %><br>
+                </div>
+                    <button id="contact-submit" type="submit" class="btn btn-primary input-medium pull-right">Send</button>
+                </div>
+            <% end %>
+        </div>
+	</div>
+</div>

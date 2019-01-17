@@ -1,0 +1,13 @@
+<p>
+</p>
+ 
+<p>
+	<% @question.each do |question| %>
+		<ul>
+			<li>
+  		<%= link_to  question.subject,new_question_answer_path(question) %>
+  	</li>
+  	</ul>
+  	<% end %>
+ </p>
+

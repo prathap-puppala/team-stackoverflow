@@ -1,0 +1,25 @@
+<h1> Edit Form</h1>
+<%= form_with(model:@answer,local:true) do |form| %>
+<% if @answer.errors.any? %>
+<div>
+<h2>
+	<%= (@answer.errors.count) %> occurs
+</h2>
+<ul>
+	<% @answer.errors.full_messages.each do |msg| %>
+	<li><%= msg %></li>
+	<% end %>
+</ul>
+</div>
+<% end %>
+
+<p>
+	<%= form.label :answer %><br>
+	<%= form.text_area:description %><br>
+</p>
+<p>
+	<%= form.submit "Edit" %>
+</p>
+<% end %>
+
+ 
