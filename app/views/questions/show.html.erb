@@ -1,13 +1,22 @@
-<p>
-</p>
- 
-<p>
-	<% @question.each do |question| %>
-		<ul>
-			<li>
-  		<%= link_to  question.subject,new_question_answer_path(question) %>
-  	</li>
-  	</ul>
-  	<% end %>
- </p>
+<br>
+<div class="container">
+  <div class="card">
+    <div class="card-header"><%= @question.subject %></div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><%= @question.description %></li>
+  </ul>
+  </div>
+  <br>
+  <div class="card">
+  	<div class="card-header"><button type="button" class="btn btn-primary">
+  Answers <span class="badge badge-light"><%= @answers.count %></span>
+</button></div>
+    <ul class="list-group list-group-flush">
+    	<% @answers.each do |answer| %>
+    <li class="list-group-item"><%= answer.description %></li>
+    	<% end %>
+  </ul>
+  </div>
+</div>
 
+<%= link_to  @question.subject,new_question_answer_path(@question) %>

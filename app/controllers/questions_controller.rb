@@ -1,17 +1,22 @@
 class QuestionsController < ApplicationController
 
 	def index
-		@user = Question.all
+		@questions = Question.all
 	end
+
 	def show
-		@question = Question.all
+		@question = Question.find(params[:id])
+		@answers = @question.answers
 	end
+
   def new
   	@question = Question.new
   end
+
   def edit
 		@question = Question.find(params[:id])
 	end
+
   def create
   	#@question = Question.new(params_require)
   	@question = current_user.questions.new(params_require)
