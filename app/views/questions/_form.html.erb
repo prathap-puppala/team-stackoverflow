@@ -1,3 +1,4 @@
+
 <br>
 <%= render 'shared/errors', obj: @question %>
 <div class="container">
@@ -19,6 +20,22 @@
                    <%= f.text_area :description %><br>
                  </div>
              </li>
+             
+             
+             <li class="list-group-item">
+                <div class="form-group">
+                   <%= f.label :tags %><br>
+             <input type="text" name="tags" placeholder="Tags" class="tm-input"/><br>
+                 </div>
+             </li>
+             
+
+             <script type="text/javascript">
+                 $(".tm-input").tagsManager();
+             </script>
+
+
+
              <li class="list-group-item">
                 <%= f.submit("#{type} Question", class:'btn btn-primary input-medium pull-right') %>
             </li>

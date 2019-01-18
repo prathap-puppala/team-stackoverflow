@@ -20,12 +20,20 @@ class QuestionsController < ApplicationController
   def create
   	#@question = Question.new(params_require)
   	@question = current_user.questions.new(params_require)
-  	if @question.save
-  		redirect_to @question
-  	else
-  		render 'new'
-  	end
+  	@tags=params["hidden-tags"].split(",")
+  	@tagid = nil
+  	@question.save
+  	for i in @tags
+  		@tagid=Tag.find_by(name: i)
+  		if !(@tagid)
+  			@tagid = Tag.create(name: i)
+		end
+		@question.question_tags.create!(tag_id: @tagid.id)
+	end
+	flash[:success] = "Question added successfully"
+  	redirect_to root_path
   end
+
   def update
 		@question = Question.find(params[:id])
 		if @question.update(params_require)
