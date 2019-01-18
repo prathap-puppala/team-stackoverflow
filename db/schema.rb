@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
     t.text "description"
     t.integer "up_vote_count"
     t.integer "down_vote_count"
-    t.binary "status", limit: 1, default: "b'0'", null: false
+    t.boolean "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "fk_rails_3d5ed4418f"
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
   create_table "question_accesses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "question_id"
     t.bigint "team_id"
-    t.binary "answer_access", limit: 1, null: false
-    t.binary "vote_access", limit: 1, null: false
+    t.boolean "answer_access"
+    t.boolean "vote_access"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "fk_rails_d98bfbec85"
@@ -72,22 +72,24 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
     t.text "description"
     t.integer "ans_upvote_score", limit: 2
     t.integer "ans_downvote_score", limit: 2
-    t.binary "status_codes_id", limit: 2
+    t.integer "up_vote_count", default: 0
+    t.integer "down_vote_count", default: 0
+    t.bigint "status_code_id", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["status_codes_id"], name: "status_codes_id"
+    t.index ["status_code_id"], name: "fk_rails_baee19ac7c"
     t.index ["team_id"], name: "fk_rails_c28fcf9c45"
     t.index ["user_id"], name: "fk_rails_047ab75908"
   end
 
-  create_table "site_settings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "site_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "key"
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "status_codes", id: :binary, limit: 2, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "status_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -144,7 +146,7 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
   add_foreign_key "question_tags", "tags"
   add_foreign_key "question_votes", "questions"
   add_foreign_key "question_votes", "users"
-  add_foreign_key "questions", "status_codes", column: "status_codes_id", name: "questions_ibfk_1"
+  add_foreign_key "questions", "status_codes"
   add_foreign_key "questions", "teams"
   add_foreign_key "questions", "users"
   add_foreign_key "team_admins", "teams"

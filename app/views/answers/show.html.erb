@@ -6,6 +6,9 @@
     <ul class="list-group list-group-flush">
     <li class="list-group-item"><%= @answer.description %></li>
   </ul>
-  </div>
+  </div><br>
+  <div class="text-center">
+  <%= link_to "Go back to Question",question_path(@question), class: 'btn btn-primary' %>
+</div>
 </div>
 

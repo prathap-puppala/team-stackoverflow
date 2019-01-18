@@ -1,0 +1,37 @@
+<br>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">Team Details</div>
+                <%= form_for obj do |f| %>
+                <li class="list-group-item">
+
+    <table class="table table-bordered">
+     <thead>
+      <tr>
+        <th>Team Name</th>
+        <th>Choice</th>
+      </tr>
+     </thead>
+     <tbody>
+        <% teams.each do |team| %>
+      <tr>
+        <td><%= team.team_name %></td>
+        <td><%= check_box_tag('user_teams_input[]') %></td>
+      </tr>
+      <% end %>
+    </tbody>
+    </table>
+            </li>
+
+             <li class="list-group-item">
+                <%= f.submit("#{type} Team Details", class:'btn btn-primary input-medium pull-right') %>
+            </li>
+                </div>
+        </div>
+            <% end %>
+    </div></div>
+        </div>
+	</div>
+</div>

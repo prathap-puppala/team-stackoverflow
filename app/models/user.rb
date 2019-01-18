@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 	has_many :questions
 	has_many :answers
+	has_and_belongs_to_many :user_teams, dependent: :destroy
 	def self.find_or_create_from_auth_hash(auth)
 		where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
 			user.provider = auth.provider

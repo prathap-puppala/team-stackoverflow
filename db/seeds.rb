@@ -8,3 +8,7 @@
 
 SiteSetting.create(key: 'question_up_score', value: 10)
 SiteSetting.create(key: 'question_down_score', value: -5)
+StatusCode.create(name: 'opened')
+StatusCode.create(name: 'accepted')
+StatusCode.create(name: 'closed')
+StatusCode.create(name: 'deleted')

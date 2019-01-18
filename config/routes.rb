@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   resources :questions do
 		  resources :answers
   end
+  resources :user_teams
 
 end

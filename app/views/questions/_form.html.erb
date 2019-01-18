@@ -5,7 +5,7 @@
 			<div class="card">
 				<div class="card-header"><%= type %> Question</div>
             <%= form_for(obj) do |f| %>
-                <% if @question.errors.any? %>
+                <% if obj.errors.any? %>
                 <div>
                     <h2><%= pluralize(obj.errors.count,"error") %> will be prohibited to save in database</h2>
                     <ul>

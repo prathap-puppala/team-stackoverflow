@@ -16,10 +16,19 @@
   <%= @answers.count %> Answers</div>
     <ul class="list-group list-group-flush">
     	<% @answers.each do |answer| %>
-    <li class="list-group-item"><%= answer.description %>
-      <div class="text-right">
-      <%= link_to  "Edit this",edit_question_answer_path(@question,answer), class: 'btn btn-primary' %>
+    <li class="list-group-item">
+
+      <span style="border: 1px solid black;padding: 10px;background: darkkhaki;">
+        <%= image_tag answer.user.picture,class: 'rounded-circle',height: '40px' %>
+        <%= answer.user.first_name %></span><br><br>
+
+      <%= answer.description %>
+      <% if current_user == answer.user %>
+      <div class="text-right" style="float:right;">
+      <%= link_to  "Edit",edit_question_answer_path(@question,answer), class: 'btn btn-info text-right' %>
+      <%= link_to  "Delete",question_answer_path(@question,answer),method: :delete, data:{confirm:'Are you sure?'}, class: 'btn btn-danger text-right' %>
     </div>
+    <% end %>
     </li>
     	<% end %>
   </ul>

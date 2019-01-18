@@ -46,7 +46,7 @@ class AnswersController < ApplicationController
 	def destroy
 		@answer = Answer.find(params[:id])
 		@answer.destroy
-		render 'new'
+		redirect_to question_path(@answer.question)
 	end
   private
   def params_require
