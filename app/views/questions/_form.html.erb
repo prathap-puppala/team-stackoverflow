@@ -1,20 +1,11 @@
 <br>
+<%= render 'shared/errors', obj: @question %>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header"><%= type %> Question</div>
             <%= form_for(obj) do |f| %>
-                <% if obj.errors.any? %>
-                <div>
-                    <h2><%= pluralize(obj.errors.count,"error") %> will be prohibited to save in database</h2>
-                    <ul>
-                        <% obj.errors.full_messages.each do |msg| %>
-                        <li><%= msg %></li>
-                    </ul>
-                    <% end %>
-                </div>
-                <% end %>
                 <li class="list-group-item">
                 <div class="form-group">
                 	<br><br>

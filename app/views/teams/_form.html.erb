@@ -1,0 +1,23 @@
+<br>
+<%= render 'shared/errors', obj: @team %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">Team Creation</div>
+                <%= form_for obj do |f| %>
+                <li class="list-group-item">
+
+    <table class="table table-bordered text-center">
+     <tbody>
+      <tr><td><%= f.text_field :team_name %> &nbsp; <%= f.submit("#{type} Team", class:'btn btn-primary input-medium') %></td></tr>
+    </tbody>
+    </table>
+            </li>
+                </div>
+        </div>
+            <% end %>
+    </div></div>
+        </div>
+	</div>
+</div>

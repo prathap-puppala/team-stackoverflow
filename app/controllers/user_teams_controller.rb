@@ -5,18 +5,11 @@ class UserTeamsController < ApplicationController
 	end
 
 	def create
-		for i in params[:user_teams_input]
-			i
-			@user_team = UserTeam.new(params_permit(i))
-			if @user_team.save
-
-			end
+		for i in params[:user_teams]
+			@team_id=eval(i)
+			current_user.user_teams.create!(team_id: @team_id[:value])
 		end
-
-	end
-
-	private
-	def params_permit(i)
-		params.require(:user_team).permit(:team_id)
+        flash[:success] = "Teams preferences has been saved successfully"
+        redirect_to questions_path
 	end
 end

@@ -1,3 +1,4 @@
+<%= render 'shared/errors', obj: @answer %>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -9,15 +10,6 @@
     <li class="list-group-item">
 
         <%= form_for(obj, url: actionpath, :html=>{class: "form-horizontal",role: "form"}) do |f| %>
-            <% if obj.errors.any? %>
-                <div>
-                    <h2><%= pluralize(obj.errors.count,"error") %> will be prohibited to save in database</h2>
-                    <ul>
-                        <% obj.errors.full_messages.each do |msg| %>
-                        <li><%= msg %></li>
-                    </ul>
-                    <% end %>
-                    <% end %>
 
                 <div class="form-group">
                 <div class="control-label col-sm-12">

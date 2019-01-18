@@ -13,6 +13,7 @@
   <body>
     <main role="main">
    <%= render 'layouts/navigation' %>
+   <div class="container"> <%= render 'layouts/messages' %></div>
     <%= yield %>
     <%= debug(params) %>
   </main>
