@@ -1,4 +1,5 @@
 class UserTeam < ApplicationRecord
-	has_and_belongs_to_many :users
-	has_and_belongs_to_many :team_admins
+	belongs_to :user
+	belongs_to :team
+	belongs_to :team_admin
 end

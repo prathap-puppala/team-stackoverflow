@@ -1,0 +1,134 @@
+
+<div class="container emp-profile">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                           <%= image_tag @user.picture %>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                        <%= @user.first_name + " " + @user.last_name %>
+                                    </h5>
+                                    <p class="proile-rating">Member of : <span>
+                                       <% @user.user_teams.each do |user_team| %>
+                                        <%= user_team.team.team_name+", " %>
+                                       <% end %>
+                                    </span></p>
+
+                                    <p class="proile-rating">Admin of : <span>
+                                       <% @user.team_admins.each do |team_admin| %>
+                                        <%= team_admin.team.team_name+", " %>
+                                       <% end %>
+                                    </span></p>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="false">Questions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="answers-tab" data-toggle="tab" href="#answers" role="tab" aria-controls="answers" aria-selected="false">Answers</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <%= link_to 'Update Teams','#',class: 'btn btn-primary' %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-work">
+                            <br>
+                            <button type="button" class="btn btn-primary">
+                             Questions <span class="badge badge-light"><%= @user.questions.count %></span>
+                            </button><br>
+                            <button type="button" class="btn btn-success">
+                             Answers <span class="badge badge-light"><%= @user.answers.count %></span>
+                            </button><br>
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%= @user.first_name+" "+@user.last_name %></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%= @user.email %></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Account Created</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%= @user.created_at %></p>
+                                            </div>
+                                        </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="questions" role="tabpanel" aria-labelledby="questions-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <%= render 'questions/questiondisplay', obj: @user.questions %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="answers" role="tabpanel" aria-labelledby="answers-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <% @user.answers.each do |answer| %>
+        <div class="media text-muted pt-3">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <span class="row">
+              <span class="text-center">
+                <%= link_to "","#",class: "fa fa-thumbs-o-up fa-2x" %>
+                <h3><%= answer.up_vote_count %></h3>
+              </span>
+
+               <span class="text-center" style="padding-left: 13px;">
+                <%= link_to "","#",class: "fa fa-thumbs-o-down fa-2x" %>
+                <h3><%= answer.down_vote_count %></h3>
+              </span>
+            </span>
+            <span>
+             <%= link_to answer.description, question_answer_path(answer.question,answer), class:'text-gray-dark' %>
+              </span>
+              <span>
+            
+              <% if current_user == answer.user %>
+              <%= link_to 'Edit', edit_question_answer_path(answer.question, answer), class: 'btn btn-info' %>
+              <%= link_to 'destroy', question_answer_path(answer.question, answer),method: :delete, data:{confirm:'Are you sure?'}, class: 'btn btn-danger' %>
+            <% end %>
+            </span>
+
+            </div>
+          </div>
+        </div>
+        <% end %>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>           
+        </div>

@@ -1,0 +1,38 @@
+<% obj.each do |question| %>
+        <div class="media text-muted pt-3">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <span class="row">
+              <span class="text-center">
+                <%= link_to "","#",class: "fa fa-thumbs-o-up fa-2x" %>
+                <h3><%= question.up_vote_count %></h3>
+              </span>
+
+               <span class="text-center" style="padding-left: 13px;">
+                <%= link_to "","#",class: "fa fa-thumbs-o-down fa-2x" %>
+                <h3><%= question.down_vote_count %></h3>
+              </span>
+            </span>
+            <span>
+             <%= link_to question.subject, question_path(question), class:'text-gray-dark' %>
+             <br>
+             <span>
+              <%
+              question.question_tags.each do |question_tag|
+              %>
+              <span class="badge badge-dark"><%= question_tag.tag.name %></span>
+              <% end %>
+            </span>
+              </span>
+              <span>
+            
+              <% if current_user == question.user %>
+              <%= link_to 'Edit', edit_question_path(question), class: 'btn btn-info' %>
+              <%= link_to 'destroy', question_path(question),method: :delete, data:{confirm:'Are you sure?'}, class: 'btn btn-danger' %>
+            <% end %>
+            </span>
+
+            </div>
+          </div>
+        </div>
+        <% end %>

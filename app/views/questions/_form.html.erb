@@ -11,13 +11,13 @@
                 <div class="form-group">
                 	<br><br>
                     <%= f.label :Subject %><br>
-                    <%= f.text_field :subject %><br>
+                    <%= f.text_field :subject,class:'form-control' %><br>
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="form-group">
                    <%= f.label :AskQuestion %><br>
-                   <%= f.text_area :description %><br>
+                   <%= f.text_area :description,class:'form-control',rows:10 %><br>
                  </div>
              </li>
              
@@ -29,16 +29,44 @@
                  </div>
              </li>
              
+             <li class="list-group-item">
+                <div class="form-group">
+             <table class="table table-bordered">
+     <thead>
+      <tr>
+        <th>Team Name</th>
+        <th>View Access</th>
+        <th>Answer Access</th>
+        <th>Vote Access</th>
+      </tr>
+     </thead>
+     <tbody>
+        <% teams.each do |tea| %>
+      <tr>
+        <td><%= tea.team.team_name %></td>
+        <td><%= check_box_tag('view_access[]',value: tea.id) %></td>
+        <td><%= check_box_tag('answer_access[]',value: tea.id) %></td>
+        <td><%= check_box_tag('vote_access[]',value: tea.id) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+    </table>
+    </div>
+    </li>
+
+             <li class="list-group-item">
+                 <div class="form-group">
+                <%= f.submit("#{type} Question", class:'btn btn-primary input-medium') %>
+            </div>
+             </li>
+
+
 
              <script type="text/javascript">
-                 $(".tm-input").tagsManager();
+                 $(".tm-input").tagsManager({prefilled: [<%= "#{tags}".html_safe %>]});
              </script>
 
 
-
-             <li class="list-group-item">
-                <%= f.submit("#{type} Question", class:'btn btn-primary input-medium pull-right') %>
-            </li>
                 </div>
             <% end %>
         </div>
