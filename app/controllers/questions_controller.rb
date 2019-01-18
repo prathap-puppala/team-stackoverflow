@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
 	def index
-		@questions = Question.all
+		@questions = Question.where.not(status_code_id: 4)
 	end
 
 	def show
@@ -9,14 +9,17 @@ class QuestionsController < ApplicationController
 		@answers = @question.answers
 	end
 
+
   def new
   	@question = Question.new
   	@tags = ""
   	@teams=current_user.user_teams
   end
 
+
   def edit
 		@question = Question.find(params[:id])
+  		@teams=current_user.user_teams
 		@tags=''
 		@question.question_tags.each do |question_tag|
 			@tags+='"'+question_tag.tag.name+'",'
@@ -24,9 +27,29 @@ class QuestionsController < ApplicationController
 		@tags=@tags[0...-1]
 	end
 
+
   def create
   	@question = current_user.questions.new(params_require)
   	@question.save
+
+  	if params.has_key?(:view_access)
+  		for i in params[:view_access]
+			@question.question_accesses.create!(team_id: i)
+		end
+	end
+
+	if params.has_key?(:answer_access)
+  		for i in params[:answer_access]
+			QuestionAccess.where(question_id: @question.id, team_id: i).update_all(answer_access: true)
+		end
+	end
+
+	if params.has_key?(:vote_access)
+  		for i in params[:vote_access]
+			QuestionAccess.where(question_id: @question.id, team_id: i).update_all(vote_access: true)
+		end
+	end
+
   	@tags=params["hidden-tags"].split(",")
   	@tagid = nil
   	for i in @tags
@@ -45,22 +68,45 @@ class QuestionsController < ApplicationController
 		@question.update(params_require)
 		@questions = QuestionTag.where(question_id: @question.id)
 		@questions.destroy_all
+		@question_accesses = QuestionAccess.where(question_id: @question.id)
+		@question_accesses.destroy_all
+
+		
+	  	
+  		if params.has_key?(:view_access)
+  			for i in params[:view_access]
+				@question.question_accesses.create!(team_id: i)
+			end
+		end
+
+		if params.has_key?(:answer_access)
+  			for i in params[:answer_access]
+				QuestionAccess.where(question_id: @question.id, team_id: i).update_all(answer_access: true)
+			end
+		end
+
+		if params.has_key?(:vote_access)
+  			for i in params[:vote_access]
+				QuestionAccess.where(question_id: @question.id, team_id: i).update_all(vote_access: true)
+			end
+		end
+
 		@tags=params["hidden-tags"].split(",")
 		@tagid = nil
 		for i in @tags
-  		@tagid=Tag.find_by(name: i)
-  		if !(@tagid)
-  			@tagid = Tag.create(name: i)
+  			@tagid=Tag.find_by(name: i)
+  			if !(@tagid)
+  				@tagid = Tag.create(name: i)
 			end
 			@question.question_tags.create!(tag_id: @tagid.id)
-	  end
+	  	end
 		flash[:success] = "Question updated successfully"
-  	redirect_to question_path(@question)
+  		redirect_to question_path(@question)
   end
 
 	def destroy
 		@question = Question.find(params[:id])
-		@question.destroy
+		Question.where(id: @question.id).update_all(status_code_id: 4)
 		flash[:success] = "Question deleted successfully"
 		redirect_to questions_path
 	end

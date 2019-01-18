@@ -3,8 +3,8 @@ class CreateQuestionAccesses < ActiveRecord::Migration[5.2]
     create_table :question_accesses do |t|
       t.bigint :question_id
       t.bigint :team_id
-      t.boolean :answer_access
-      t.boolean :vote_access
+      t.boolean :answer_access, default: false
+      t.boolean :vote_access, default: false
 
       t.timestamps
     end

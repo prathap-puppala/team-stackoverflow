@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
     t.bigint "user_id"
     t.bigint "question_id"
     t.text "description"
-    t.integer "up_vote_count"
-    t.integer "down_vote_count"
+    t.integer "up_vote_count", default: 0
+    t.integer "down_vote_count", default: 0
     t.boolean "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
   create_table "question_accesses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "question_id"
     t.bigint "team_id"
-    t.boolean "answer_access"
-    t.boolean "vote_access"
+    t.boolean "answer_access", default: false
+    t.boolean "vote_access", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "fk_rails_d98bfbec85"

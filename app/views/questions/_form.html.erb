@@ -41,12 +41,18 @@
       </tr>
      </thead>
      <tbody>
-        <% teams.each do |tea| %>
+        <!-- 
+            checked = ((obj.question_accesses.where(team_id: tea.id).first[:answer_access]) if obj.question_accesses.where(team_id: tea.id).any?)
+
+        -->
+        <% teams.each do |tea| 
+            @access=obj.question_accesses.where(team_id: tea.id).any?
+            %>
       <tr>
         <td><%= tea.team.team_name %></td>
-        <td><%= check_box_tag('view_access[]',value: tea.id) %></td>
-        <td><%= check_box_tag('answer_access[]',value: tea.id) %></td>
-        <td><%= check_box_tag('vote_access[]',value: tea.id) %></td>
+        <td><%= check_box_tag('view_access[]', value = tea.id, checked = (@access)) %></td>
+        <td><%= check_box_tag('answer_access[]',value = tea.id, checked = (obj.question_accesses.where(team_id: tea.id).first[:answer_access] if @access)) %></td>
+        <td><%= check_box_tag('vote_access[]', value = tea.id, checked = (obj.question_accesses.where(team_id: tea.id).first[:vote_access] if @access)) %></td>
       </tr>
       <% end %>
     </tbody>
