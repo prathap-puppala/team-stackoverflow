@@ -1,0 +1,38 @@
+<br>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header"><%= type %> Question</div>
+            <%= form_for(obj) do |f| %>
+                <% if @question.errors.any? %>
+                <div>
+                    <h2><%= pluralize(obj.errors.count,"error") %> will be prohibited to save in database</h2>
+                    <ul>
+                        <% obj.errors.full_messages.each do |msg| %>
+                        <li><%= msg %></li>
+                    </ul>
+                    <% end %>
+                </div>
+                <% end %>
+                <li class="list-group-item">
+                <div class="form-group">
+                	<br><br>
+                    <%= f.label :Subject %><br>
+                    <%= f.text_field :subject %><br>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="form-group">
+                   <%= f.label :AskQuestion %><br>
+                   <%= f.text_area :description %><br>
+                 </div>
+             </li>
+             <li class="list-group-item">
+                <%= f.submit("#{type} Question", class:'btn btn-primary input-medium pull-right') %>
+            </li>
+                </div>
+            <% end %>
+        </div>
+	</div>
+</div>

@@ -1,0 +1,41 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+            <br>
+            <div class="card">
+    <div class="card-header"><%= question.subject %></div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><%= question.description %>
+    <li class="list-group-item">
+
+        <%= form_for(obj, url: actionpath, :html=>{class: "form-horizontal",role: "form"}) do |f| %>
+            <% if obj.errors.any? %>
+                <div>
+                    <h2><%= pluralize(obj.errors.count,"error") %> will be prohibited to save in database</h2>
+                    <ul>
+                        <% obj.errors.full_messages.each do |msg| %>
+                        <li><%= msg %></li>
+                    </ul>
+                    <% end %>
+                    <% end %>
+
+                <div class="form-group">
+                <div class="control-label col-sm-12">
+            </div>
+            <div class="col-sm-12">
+                <%= f.text_area :description, class:"form-control", placeholder: "Enter your Aswer",rows: 10, cols: 50 %>
+            </div>
+        </div>
+
+                <%= f.submit("Submit Answer", class:'btn btn-primary input-medium pull-right') %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+    </li>   
+    </li>
+  </ul>
+  </div>
+            

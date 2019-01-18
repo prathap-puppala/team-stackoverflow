@@ -1,14 +1,11 @@
-<p>
-</p>
- 
-<p>
-   
-</p>
-<p>
-	
-		<p><b><%= Question.find(params[:question_id]).subject
- %></b></p>
-  		<p><i><%= @answer.description %><i></p>
- 
- 
- </p>
+<br>
+<div class="container">
+  <div class="card">
+  	<div class="card-header">
+  <%= @question.subject %></div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><%= @answer.description %></li>
+  </ul>
+  </div>
+</div>
+

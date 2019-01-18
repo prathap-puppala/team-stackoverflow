@@ -1,8 +1,7 @@
 class AnswersController < ApplicationController
   def index
-    #user = User.find.first
-    question = Question.find(params[:question_id])
-  	@answer = question.answers.all
+    @question = Question.find(params[:question_id])
+  	@answers = @question.answers.all
 
   end
   def new
@@ -12,30 +11,34 @@ class AnswersController < ApplicationController
 
   def show
     @question = Question.find(params[:question_id])
-    @answer = question.answers.all
-   # @question = Question.all
-  	#@answer = Answer.find(params[:id])
+    @answer = Answer.find(params[:id])
+    #@answer = @question.answers
   end
+
    def edit
 		@answer = Answer.find(params[:id])
+    @question = @answer.question
 	end
 	
   def create
   	@answer = Answer.new(params_require)
     @answer = current_user.answers.new(params_require)
-    @answer.question_id = Question.find(params[:question_id]).id
+    @question = Question.find(params[:question_id])
+    @answer.question_id = @question.id
     #@answer.user_id = session[:user_id]
     #@answer.question_id = question_id
   	if @answer.save
-  		render 'show'
+  		redirect_to question_answer_path(@question,@answer)
   	else
   		render 'new'
   	end
   end
+
   def update
 		@answer = Answer.find(params[:id])
+    @question = @answer.question
 		if @answer.update(params_require)
-			redirect_to @answer
+			redirect_to question_answer_path(@question,@answer)
 		else
 			render 'edit'
 		end
