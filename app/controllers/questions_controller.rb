@@ -58,7 +58,7 @@ class QuestionsController < ApplicationController
 
   private
   def params_require
-  	params.require(:question).permit(:subject,:description,:ans_upvote_score, :ans_downvote_score)
+  	params.require(:question).permit(:subject,:description,:ans_upvote_score, :ans_downvote_score, :team_id)
   end
 
   def do_processing_for_tags_and_access

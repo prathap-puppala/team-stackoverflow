@@ -8,7 +8,7 @@ class TeamsController < ApplicationController
 		if @team.save
 			current_user.team_admins.create!(team_id: @team.id)
 			 flash[:success] = "Teams has been saved successfully"
-        	redirect_to questions_path
+        	redirect_to edit_user_team_path(current_user)
         else
         	render 'new'
 		end
