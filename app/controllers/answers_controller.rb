@@ -53,33 +53,34 @@ class AnswersController < ApplicationController
 
 
   def upvote
-    @question = Question.find(params[:question_id])
-    #@answer.upvote_from current_user
-    if @answer.answer_votes.where(user_id: current_user.id).empty?
-      
-      @answer.answer_votes.create!(up_down_vote: 1,user_id:current_user.id)
-      
-    end
-    @answer.up_vote_count = @answer.answer_votes.where(:up_down_vote=>1).count
+     @question = Question.find(params[:question_id])
 
-    @answer.save
+    if @answer.user_not_upvoted?
+      @answer.upvote
+      @answer.up_vote_count = @question.upvote_count
+      @answer.save
+    end
+
     redirect_to question_path(@question,@answer)
   end
 
-  def downvote
-    @question = Question.find(params[:question_id])
-    #@answer.downvote_from current_user
-    if @answer.answer_votes.where(user_id: current_user.id).empty?
-      @answer.answer_votes.create!(user_id:current_user.id,up_down_vote:-1)
-    end
-    @answer.down_vote_count = @answer.answer_votes.where(:up_down_vote=>-1).count
 
-    @answer.save
+  def downvote
+  
+    @question = Question.find(params[:question_id])
+
+    if @answer.user_not_downvoted?
+      @answer.downvote
+      @answer.down_vote_count = @answer.downvote_count
+      @answer.save
+    end
+
     redirect_to question_path(@question,@answer)
   end
 
   def set_answer
     @answer = Answer.find(params[:id])
+    @answer.current_user = current_user
   end
 
   

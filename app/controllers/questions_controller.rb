@@ -30,6 +30,7 @@ before_action :set_question, only: [:show, :edit, :update, :destroy, :upvote, :d
 
   def create
   	@question = current_user.questions.new(params_require)
+
   	@question.save
 
   	if params.has_key?(:view_access)
@@ -113,32 +114,27 @@ before_action :set_question, only: [:show, :edit, :update, :destroy, :upvote, :d
 
 
 	def upvote
-		#@question = Question.find(params[:id])
-		
-		#@question.upvote_from current_user
-		if @question.question_votes.where(user_id: current_user.id).empty?
-			
-			@question.question_votes.create!(up_down_vote: 1,user_id:current_user.id)
-			
+		if @question.user_not_upvoted?
+			@question.upvote
+			@question.up_vote_count = @question.upvote_count
+			@question.save
 		end
-		@question.up_vote_count = @question.question_votes.where(:up_down_vote=>1).count
 
-		@question.save
 		redirect_to questions_path
 	end
 
 	def downvote
 		#@question.downvote_from current_user
-		if @question.question_votes.where(user_id: current_user.id).empty?
-			@question.question_votes.create!(user_id:current_user.id,up_down_vote:-1)
+		if @question.user_not_downvoted?
+			@question.downvote
+			@question.down_vote_count = @question.downvote_count
+			@question.save
 		end
-		@question.down_vote_count = @question.question_votes.where(:up_down_vote=>-1).count
-
-		@question.save
 		redirect_to questions_path
 	end
 	def set_question
 		@question = Question.find(params[:id])
+		@question.current_user = current_user
 	end
 
 	
