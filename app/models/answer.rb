@@ -3,5 +3,5 @@ class Answer < ApplicationRecord
 	belongs_to :question
 	#has_many :votes, :as => :votable
 	has_many :answer_votes
-	acts_as_votable
+	#acts_as_votable
 end
