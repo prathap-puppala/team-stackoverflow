@@ -1,4 +1,6 @@
 class TeamsController < ApplicationController
+	before_action :authenticate
+	
 	def new
 		@team = Team.new
 	end

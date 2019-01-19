@@ -1,6 +1,11 @@
 class UserTeamsController < ApplicationController
+	before_action :authenticate
+	before_action :same_user, only: [:edit, :update]
+
 	def new
 		@user_team = UserTeam.new
+	  @user_team.current_user = current_user
+	  redirect_to edit_user_team_path(current_user) if !@user_team.filled?
 		@teams = Team.all
 	end
 
@@ -15,7 +20,7 @@ class UserTeamsController < ApplicationController
 	def edit
 		@user_team = UserTeam.new
 		@teams = Team.all
-	end	
+	end
 
 	def update
 		@user_team_access = current_user.user_teams
@@ -25,6 +30,14 @@ class UserTeamsController < ApplicationController
 		end
         flash[:success] = "Teams preferences has been saved successfully"
         redirect_to edit_user_team_path(current_user)
+	end
+
+	private
+	def same_user
+		if params[:id].to_i != current_user.id
+			flash[:danger] = "You dont have privileges to perform this action"
+			redirect_to user_path(current_user)
+		end
 	end
 
 end

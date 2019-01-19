@@ -1,6 +1,8 @@
-# This class
 class AnswersController < ApplicationController
-  before_action :set_answer, only: %i[show edit update destroy upvote downvote]
+	before_action :authenticate
+	before_action :check_user_filled_teams
+  before_action :set_answer, only: [:show, :edit, :update, :destroy, :upvote, :downvote, :accept]
+	before_action :same_user, only: [:edit, :update, :destroy]
   def index
     @question = Question.find(params[:question_id])
     @answers = @question.answers.all
@@ -54,37 +56,50 @@ class AnswersController < ApplicationController
 
   def upvote
     @question = Question.find(params[:question_id])
-    # @answer.upvote_from current_user
-    if @answer.answer_votes.where(user_id: current_user.id).empty?
-
-      @answer.answer_votes.create!(up_down_vote: 1, user_id: current_user.id)
-
+    if @answer.user_not_upvoted?
+      @answer.upvote
+      @answer.up_vote_count = @question.upvote_count
+      @answer.save
     end
-    @answer.up_vote_count = @answer.answer_votes.where(up_down_vote: 1).count
-
-    @answer.save
     redirect_to question_path(@question, @answer)
   end
 
   def downvote
     @question = Question.find(params[:question_id])
-    # @answer.downvote_from current_user
-    if @answer.answer_votes.where(user_id: current_user.id).empty?
-      @answer.answer_votes.create!(user_id: current_user.id, up_down_vote: -1)
+    if @answer.user_not_downvoted?
+      @answer.downvote
+      @answer.down_vote_count = @answer.downvote_count
+      @answer.save
     end
-    @answer.down_vote_count = @answer.answer_votes.where(up_down_vote: -1).count
 
-    @answer.save
     redirect_to question_path(@question, @answer)
   end
 
+	def accept
+			if (Question.find(params[:question_id]).user_id) != (current_user.id)
+					flash[:danger] = "You dont have privileges to perform this action"
+			else
+					Question.where(id: params[:question_id]).update_all(status_code_id: 2)
+					flash[:success] = "Answer marked as successfully"
+			end
+			redirect_to question_answers_path(params[:question_id])
+	end
+
   def set_answer
     @answer = Answer.find(params[:id])
+    @answer.current_user = current_user
   end
 
   private
 
   def params_require
     params.require(:answer).permit(:description)
-    end
+  end
+
+	def same_user
+		if @answer.user_id != current_user.id
+			flash[:danger] = "You dont have privileges to perform this action"
+			redirect_to question_answers_path(@answer.question_id)
+		end
+	end
 end

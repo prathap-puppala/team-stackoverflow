@@ -22,15 +22,15 @@
                    <%= f.text_area :description,class:'form-control',rows:10 %><br>
                  </div>
              </li>
-             
-             
+
+
              <li class="list-group-item">
                 <div class="form-group">
                    <%= f.label :tags %><br>
              <input type="text" name="tags" placeholder="Tags" class="tm-input"/><br>
                  </div>
              </li>
-             
+
             <li class="list-group-item">
                 <div class="form-group">
                     <br><br>
@@ -52,10 +52,10 @@
                 <div class="form-group">
                     <br><br>
                     <%= f.label :Under_Which_Category_you_want_to_post_this_question %><br>
-             <%= f.select(:team_id, options_for_select(current_user.user_teams.collect{|p| [p.team.team_name,p.team.id]}, obj.team_id),{include_blank: true},{:class => 'form-control'}) %><br>
+             <%= f.select(:team_id, options_for_select(current_user.user_teams.collect{|p| [p.team.team_name,p.team.id]}, obj.team_id),{include_blank: true},{:class => 'form-control', :required => true}) %><br>
                 </div>
             </li>
-             
+
 
              <li class="list-group-item">
                 <div class="form-group">
@@ -69,11 +69,11 @@
       </tr>
      </thead>
      <tbody>
-        <!-- 
+        <!--
             checked = ((obj.question_accesses.where(team_id: tea.id).first[:answer_access]) if obj.question_accesses.where(team_id: tea.id).any?)
 
         -->
-        <% teams.each do |tea| 
+        <% current_user.user_teams.each do |tea|
             @access=obj.question_accesses.where(team_id: tea.team_id).any?
             %>
       <tr>

@@ -17,8 +17,11 @@ class User < ApplicationRecord
 			user.picture = auth.info.image
 			user.save!
 		end
-	end	
+	end
 
+	def self.teams_list user
+		user.user_teams.collect(&:team_id)
+	end
 
 	#def make_current
 	#	Thread.current[:user] =self

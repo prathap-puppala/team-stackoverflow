@@ -1,3 +1,5 @@
 class SiteSetting < ApplicationRecord
-	#belongs_to :question
+	def getvalue(item)
+    SiteSetting.find_by(key: item)[:value]
+  end
 end
