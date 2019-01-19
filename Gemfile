@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
- 
+
 # rails_rest_vote gem
 gem 'acts_as_votable', '~> 0.12.0'
 gem 'bootstrap-tagsinput-rails'
@@ -10,6 +10,8 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'rails_rest_vote'
 
 gem 'bootstrap-tagsinput-rails'
+
+gem 'rubocop', '~> 0.63.0', require: false
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.2'
