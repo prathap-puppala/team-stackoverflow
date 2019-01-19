@@ -13,4 +13,16 @@ class TeamsController < ApplicationController
         	render 'new'
 		end
 	end
+	def edit
+		@team = Team.find(params[:id])
+	end
+
+	def update
+		@team = Team.find(params[:id])
+		if @team.update(params_require)
+			redirect_to question_path(@question)
+		else
+			render 'edit'
+		end
+	end
 end

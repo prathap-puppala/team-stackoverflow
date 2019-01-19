@@ -1,11 +1,11 @@
 class QuestionsController < ApplicationController
+before_action :set_question, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
 
 	def index
 		@questions = Question.where.not(status_code_id: 4)
 	end
 
 	def show
-		@question = Question.find(params[:id])
 		@answers = @question.answers
 	end
 
@@ -110,6 +110,38 @@ class QuestionsController < ApplicationController
 		flash[:success] = "Question deleted successfully"
 		redirect_to questions_path
 	end
+
+
+	def upvote
+		#@question = Question.find(params[:id])
+		
+		#@question.upvote_from current_user
+		if @question.question_votes.where(user_id: current_user.id).empty?
+			
+			@question.question_votes.create!(up_down_vote: 1,user_id:current_user.id)
+			
+		end
+		@question.up_vote_count = @question.question_votes.where(:up_down_vote=>1).count
+
+		@question.save
+		redirect_to questions_path
+	end
+
+	def downvote
+		#@question.downvote_from current_user
+		if @question.question_votes.where(user_id: current_user.id).empty?
+			@question.question_votes.create!(user_id:current_user.id,up_down_vote:-1)
+		end
+		@question.down_vote_count = @question.question_votes.where(:up_down_vote=>-1).count
+
+		@question.save
+		redirect_to questions_path
+	end
+	def set_question
+		@question = Question.find(params[:id])
+	end
+
+	
   private
   def params_require
   	params.require(:question).permit(:subject,:description)

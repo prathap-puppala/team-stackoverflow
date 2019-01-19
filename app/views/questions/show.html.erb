@@ -25,6 +25,22 @@
       <%= answer.description %>
       <% if current_user == answer.user %>
       <div class="text-right" style="float:right;">
+
+         <span class="text-center">
+               <%= link_to like_question_answer_path(@question.id,answer),class:"like",method: :put do %>
+               <i class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
+               <% end %>
+             
+                <h3><%= answer.up_vote_count %></h3>
+              </span>
+
+              <span class="text-center" style="padding-left: 13px;">
+                 <%= link_to unlike_question_answer_path(@question.id,answer),class:"like",method: :put do %>
+               <i class="fa fa-thumbs-down fa-2x" aria-hidden="true"></i>
+               <% end %>
+                <h3><%= answer.down_vote_count %></h3>
+              </span>
+
       <%= link_to  "Edit",edit_question_answer_path(@question,answer), class: 'btn btn-info text-right' %>
       <%= link_to  "Delete",question_answer_path(@question,answer),method: :delete, data:{confirm:'Are you sure?'}, class: 'btn btn-danger text-right' %>
     </div>
