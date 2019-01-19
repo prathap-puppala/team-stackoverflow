@@ -14,6 +14,8 @@
                     <%= f.text_field :subject,class:'form-control' %><br>
                 </div>
             </li>
+
+
             <li class="list-group-item">
                 <div class="form-group">
                    <%= f.label :AskQuestion %><br>
@@ -28,6 +30,22 @@
              <input type="text" name="tags" placeholder="Tags" class="tm-input"/><br>
                  </div>
              </li>
+             
+            <li class="list-group-item">
+                <div class="form-group">
+                    <br><br>
+                    <%= f.label :ans_upvote_score %><br>
+                    <%= f.text_field :ans_upvote_score,class:'form-control' %><br>
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <div class="form-group">
+                    <br><br>
+                    <%= f.label :ans_downvote_score %><br>
+                    <%= f.text_field :ans_downvote_score,class:'form-control' %><br>
+                </div>
+            </li>
              
              <li class="list-group-item">
                 <div class="form-group">
@@ -46,13 +64,13 @@
 
         -->
         <% teams.each do |tea| 
-            @access=obj.question_accesses.where(team_id: tea.id).any?
+            @access=obj.question_accesses.where(team_id: tea.team_id).any?
             %>
       <tr>
         <td><%= tea.team.team_name %></td>
-        <td><%= check_box_tag('view_access[]', value = tea.id, checked = (@access)) %></td>
-        <td><%= check_box_tag('answer_access[]',value = tea.id, checked = (obj.question_accesses.where(team_id: tea.id).first[:answer_access] if @access)) %></td>
-        <td><%= check_box_tag('vote_access[]', value = tea.id, checked = (obj.question_accesses.where(team_id: tea.id).first[:vote_access] if @access)) %></td>
+        <td><%= check_box_tag('view_access[]', value = tea.team_id, checked = (@access)) %></td>
+        <td><%= check_box_tag('answer_access[]',value = tea.team_id, checked = (obj.question_accesses.where(team_id: tea.team_id).first[:answer_access] if @access)) %></td>
+        <td><%= check_box_tag('vote_access[]', value = tea.team_id, checked = (obj.question_accesses.where(team_id: tea.team_id).first[:vote_access] if @access)) %></td>
       </tr>
       <% end %>
     </tbody>
