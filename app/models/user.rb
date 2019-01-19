@@ -5,7 +5,7 @@ class User < ApplicationRecord
 	has_many :team_admins
 	has_many :teams, :through => :team_admins
 	has_many :teams, :through => :user_teams
-	acts_as_voter
+	#acts_as_voter
 
 	def self.find_or_create_from_auth_hash(auth)
 		where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
