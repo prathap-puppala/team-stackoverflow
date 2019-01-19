@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :set_answer, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
   def index
     @question = Question.find(params[:question_id])
   	@answers = @question.answers.all
@@ -21,6 +22,7 @@ class AnswersController < ApplicationController
 	end
 	
   def create
+
   	@answer = Answer.new(params_require)
     @answer = current_user.answers.new(params_require)
     @question = Question.find(params[:question_id])
@@ -48,6 +50,39 @@ class AnswersController < ApplicationController
 		@answer.destroy
 		redirect_to question_path(@answer.question)
 	end
+
+
+  def upvote
+    @question = Question.find(params[:question_id])
+    #@answer.upvote_from current_user
+    if @answer.answer_votes.where(user_id: current_user.id).empty?
+      
+      @answer.answer_votes.create!(up_down_vote: 1,user_id:current_user.id)
+      
+    end
+    @answer.up_vote_count = @answer.answer_votes.where(:up_down_vote=>1).count
+
+    @answer.save
+    redirect_to question_path(@question,@answer)
+  end
+
+  def downvote
+    @question = Question.find(params[:question_id])
+    #@answer.downvote_from current_user
+    if @answer.answer_votes.where(user_id: current_user.id).empty?
+      @answer.answer_votes.create!(user_id:current_user.id,up_down_vote:-1)
+    end
+    @answer.down_vote_count = @answer.answer_votes.where(:up_down_vote=>-1).count
+
+    @answer.save
+    redirect_to question_path(@question,@answer)
+  end
+
+  def set_answer
+    @answer = Answer.find(params[:id])
+  end
+
+  
   private
   def params_require
   	params.require(:answer).permit(:description)

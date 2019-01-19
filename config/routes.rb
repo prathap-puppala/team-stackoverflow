@@ -9,9 +9,19 @@ Rails.application.routes.draw do
   root to: "sessions#new"
   
   resources :questions do
-		  resources :answers
+    member do
+        put "like" => "questions#upvote"
+        put "unlike" => "questions#downvote"
+      end
+		  resources :answers do
+        member do
+          put "like" => "answers#upvote"
+          put "unlike" => "answers#downvote"
+        end
+      end
   end
   resources :user_teams
   resources :teams
+  resources :votes
 
 end

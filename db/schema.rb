@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_172701) do
+ActiveRecord::Schema.define(version: 2019_01_18_175446) do
 
   create_table "answer_votes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "answer_id"
-    t.integer "up_down_score", limit: 2
+    t.integer "up_down_vote", limit: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["answer_id"], name: "fk_rails_e53de8bac5"
@@ -134,6 +134,20 @@ ActiveRecord::Schema.define(version: 2019_01_14_172701) do
     t.string "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "votes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "votable_type"
+    t.integer "votable_id"
+    t.string "voter_type"
+    t.integer "voter_id"
+    t.boolean "vote_flag"
+    t.string "vote_scope"
+    t.integer "vote_weight"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
+    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
   end
 
   add_foreign_key "answer_votes", "answers"
