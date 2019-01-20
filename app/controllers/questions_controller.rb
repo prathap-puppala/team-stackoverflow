@@ -34,7 +34,7 @@ class QuestionsController < ApplicationController
   def create
   	@question = current_user.questions.new(params_require)
   	if @question.save
-  		#do_processing_for_tags_and_access
+  		do_processing_for_tags_and_access
 	  	flash[:success] = "Question added successfully"
   		redirect_to root_path
 		else
