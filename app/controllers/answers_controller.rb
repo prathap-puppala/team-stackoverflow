@@ -12,6 +12,10 @@ class AnswersController < ApplicationController
   def new
     @answer = Answer.new
     @question = Question.find(params[:question_id])
+		if !@question.user_has_right_to_answer?
+						flash[:danger] = "You are not allowed to answer this question"
+						redirect_to question_path(@question)
+		end
   end
 
   def show
@@ -57,6 +61,10 @@ class AnswersController < ApplicationController
 
   def upvote
     @question = Question.find(params[:question_id])
+		if !@question.user_has_right_to_vote?
+				flash[:danger] = "You are not allowed to vote this answer"
+				redirect_to question_path(@question) and return
+		end
     if @answer.user_not_upvoted?
       @answer.upvote
       @answer.up_vote_count = @question.upvote_count
@@ -67,6 +75,10 @@ class AnswersController < ApplicationController
 
   def downvote
     @question = Question.find(params[:question_id])
+		if !@question.user_has_right_to_vote?
+				flash[:danger] = "You are not allowed to vote this answer"
+				redirect_to question_path(@question)
+		end
     if @answer.user_not_downvoted?
       @answer.downvote
       @answer.down_vote_count = @answer.downvote_count

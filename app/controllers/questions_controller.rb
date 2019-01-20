@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
 	before_action :same_user, only: [:edit, :update, :destroy, :close]
 
 	def index
-		@questions = Question.questions(current_user)
+		@questions = Question.questions(current_user).paginate(page: params[:page], per_page: 10)
 	end
 
 	def show
@@ -13,7 +13,7 @@ class QuestionsController < ApplicationController
 			flash[:danger] = "You are not allowed to view this question"
 			redirect_to root_path
 		end
-		@answers = Answer.answers(@question.id)
+		@answers = Answer.answers(@question.id).paginate(page: params[:page], per_page: 10)
 	end
 
 
@@ -131,6 +131,7 @@ class QuestionsController < ApplicationController
 		@question.current_user = current_user
 	end
 
+	
 	private
 	  def params_require
 	  	params.require(:question).permit(:subject,:description,:ans_upvote_score, :ans_downvote_score, :team_id)

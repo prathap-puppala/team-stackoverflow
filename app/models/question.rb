@@ -33,6 +33,19 @@ class Question < ApplicationRecord
 			end
 	end
 
+	def answer_list questions, user_teams_list
+		questions.select do |question|
+				@team_ids = (question.question_accesses.select{|access| access[:answer_access]==true}.pluck(:team_id));
+				((!(@team_ids & user_teams_list).empty?) && question[:status_code_id].to_i!=4)
+			end
+	end
+
+	def vote_list questions, user_teams_list
+		questions.select do |question|
+				@team_ids = (question.question_accesses.select{|access| access[:vote_access]==true}.pluck(:team_id));
+				((!(@team_ids & user_teams_list).empty?) && question[:status_code_id].to_i!=4)
+			end
+	end
 
  def can_we_display?
 	 	question_ref = Question.where(id: self[:id])
@@ -40,6 +53,25 @@ class Question < ApplicationRecord
 		self[:id].to_i == question[0][:id].to_i unless question.empty?
  end
 
+
+ 	def user_has_right_to_answer?
+ 	 	question_ref = Question.where(id: self[:id])
+	 	question = answer_list question_ref,User.teams_list(user)
+		self[:id].to_i == question[0][:id].to_i unless question.empty?
+
+ 	end
+
+	def user_has_right_to_vote?
+		question_ref = Question.where(id: self[:id])
+		question = vote_list question_ref,User.teams_list(user)
+		self[:id].to_i == question[0][:id].to_i unless question.empty?
+	end
+
+	def self.search key
+		if key.present?
+			Question.where('subject LIKE ?', "%#{key}%")
+		end
+	end
 
 	def upvote
 		self.question_votes.create!(up_down_vote: UP_DOWN_SCORE[0], user_id:current_user.id)

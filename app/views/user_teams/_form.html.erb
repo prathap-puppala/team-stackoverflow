@@ -1,15 +1,15 @@
 <br>
-<%= render 'shared/errors', obj: @user_team %> 
+<%= render 'shared/errors', obj: @user_team %>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">Team Details</div>
-        
+
         <div class="text-center">
           <%= link_to "Click here if your team isn't listed",new_team_path, class: 'btn btn-primary' %>
         </div>
-                <%= 
+                <%=
                 form_for(obj, url: actionpath,method: method, :html=>{class: "form-horizontal",role: "form"}) do |f| %>
                 <li class="list-group-item">
     <table class="table table-bordered">
@@ -20,7 +20,7 @@
       </tr>
      </thead>
      <tbody>
-        <% teams.each do |team| 
+        <% teams.each do |team|
           @access=current_user.user_teams.where(team_id: team.id).any?
           %>
       <tr>

@@ -24,6 +24,8 @@ gem 'bootstrap', '~>4.0.0'
 gem 'sass-rails', '~> 5.0'
 gem 'jquery-rails'
 gem 'omniauth-google-oauth2'
+gem 'will_paginate', '~>3.1.5'
+gem 'will_paginate-bootstrap4'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes

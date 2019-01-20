@@ -1,0 +1,22 @@
+<br>
+<div class="container"%>
+<%= will_paginate @results %>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Upvotes</th>
+        <th>Downvotes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @results.each do |result| %>
+      <tr>
+        <td><%= link_to result.subject,question_path(result),target: 'blank' %></td>
+        <td><%= result.up_vote_count %></td>
+        <td><%= result.down_vote_count %></td>
+      </tr>
+      <% end %>
+      </tbody>
+      </table>
+</div>
