@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
-SiteSetting.create(key: 'question_up_score', value: 10)
+# site_settings data
+SiteSetting.create(key: 'question_up_score',value: 10)
 SiteSetting.create(key: 'question_down_score', value: -5)
+
+# status_codes data
 StatusCode.create(name: 'opened')
 StatusCode.create(name: 'accepted')
 StatusCode.create(name: 'closed')
 StatusCode.create(name: 'deleted')
 
+# teams data
 SAMPLE_TEAMS = [
   'Fresh Reports', 'Fresh Search', 'Fresh Desk', 'Fresh support'
 ].freeze
@@ -15,6 +19,7 @@ SAMPLE_TEAMS.each do |team|
   Team.create(team_name: team)
 end
 
+# tags data
 TAGS = [
   'rails', 'ruby', 'ruby on rails', 'python', 'flask', 'C', 'CPP', 'Java',
   'Machine Learning', 'General Questions'
@@ -24,6 +29,7 @@ TAGS.each do |tag|
   Tag.create(name: tag)
 end
 
+# questions data
 SAMPLE_QUESTIONS = [
   'How was your experience with Tinder in India?',
   'What development tools have you used?',
@@ -43,6 +49,7 @@ SAMPLE_QUESTIONS = [
 answer_up_down_vote_score = [10, 5]
 
 SAMPLE_QUESTIONS.each_with_index do |question, index|
+  # questions data
   Question.create(user_id: 1,
                   subject: question,
                   description: question,
@@ -52,8 +59,10 @@ SAMPLE_QUESTIONS.each_with_index do |question, index|
                   down_vote_count: 0,
                   team_id: (index % 4) + 1)
 
+  # question tags data
   QuestionTag.create(question_id: (index + 1), tag_id: 10)
 
+  # question access data
   SAMPLE_TEAMS.each_with_index do |_team, team_index|
     QuestionAccess.create(question_id: (index + 1),
                           team_id: (team_index + 1),

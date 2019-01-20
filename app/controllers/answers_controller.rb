@@ -1,106 +1,77 @@
+# frozen_string_literal: true
+
+# contains answer related functions
 class AnswersController < ApplicationController
-	before_action :authenticate
-	before_action :check_user_filled_teams
-  before_action :set_answer, only: [:show, :edit, :update, :destroy, :upvote, :downvote, :accept]
-	before_action :same_user, only: [:edit, :update, :destroy]
+  before_action :authenticate
+  before_action :check_user_has_teams
+  before_action :set_answer, only: %i[show edit update destroy
+                                      upvote downvote accept]
+  before_action :check_same_user, only: %i[edit update destroy]
 
   def index
     @question = Question.find(params[:question_id])
-    @answers = @question.answers.all
+    @answers = @question.answers.paginate(
+      page: params[:page],
+      per_page: 1
+    )
   end
 
   def new
-    @answer = Answer.new
     @question = Question.find(params[:question_id])
-		if !@question.user_has_right_to_answer?
-						flash[:danger] = "You are not allowed to answer this question"
-						redirect_to question_path(@question)
-		end
+    unless @question.can_be_answered?(current_user)
+      flash[:danger] = 'You are not allowed to answer this question'
+      redirect_to question_path(@question)
+    end
+    @answer = Answer.new
   end
 
   def show
-    @question = Question.find(params[:question_id])
-    @answer = Answer.find(params[:id])
-    # @answer = @question.answers
+    nil
   end
 
   def edit
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
+    nil
   end
 
   def create
-    @answer = Answer.new(params_require)
-    @answer = current_user.answers.new(params_require)
     @question = Question.find(params[:question_id])
-    @answer.question_id = @question.id
-    # @answer.user_id = session[:user_id]
-    # @answer.question_id = question_id
-    if @answer.save
-      redirect_to question_answer_path(@question, @answer)
-    else
-      render 'new'
-    end
+    @answer = current_user.answers.create!(question_id: @question.id,
+                                           description: params[:answer][:description])
+    redirect_to question_answer_path(@question, @answer)
+    flash[:success] = 'Answer Submission successful'
   end
 
   def update
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
-    if @answer.update(params_require)
-      redirect_to question_answer_path(@question, @answer)
-    else
-      render 'edit'
-    end
+    return render 'edit' unless @answer.update(params_require)
+
+    redirect_to question_answer_path(@question, @answer)
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-    @answer.destroy
-    redirect_to question_path(@answer.question)
+    redirect_to question_path(@answer.question) if @answer.destroy
   end
 
   def upvote
-    @question = Question.find(params[:question_id])
-		if !@question.user_has_right_to_vote?
-				flash[:danger] = "You are not allowed to vote this answer"
-				redirect_to question_path(@question) and return
-		end
-    if @answer.user_not_upvoted?
-      @answer.upvote
-      @answer.up_vote_count = @question.upvote_count
-      @answer.save
-    end
+    flash[:success] = 'Upvote success' if @answer.upvote(current_user)
     redirect_to question_path(@question)
   end
 
   def downvote
-    @question = Question.find(params[:question_id])
-		if !@question.user_has_right_to_vote?
-				flash[:danger] = "You are not allowed to vote this answer"
-				redirect_to question_path(@question)
-		end
-    if @answer.user_not_downvoted?
-      @answer.downvote
-      @answer.down_vote_count = @answer.downvote_count
-      @answer.save
-    end
-
+    flash[:success] = 'Downvote success' if @answer.downvote(current_user)
     redirect_to question_path(@question)
   end
 
-	def accept
-			if (Question.find(params[:question_id]).user_id) != (current_user.id)
-					flash[:danger] = "You dont have privileges to perform this action"
-			else
-					Question.where(id: params[:question_id]).update_all(status_code_id: 2)
-					flash[:success] = "Answer marked as successfully"
-			end
-			redirect_to question_answers_path(params[:question_id])
-	end
+  def accept
+    flash[:danger] = 'You cannot perform this action' if
+    @question.user_id != current_user.id
+
+    flash[:success] = 'Answer marked as successfully' if @answer.accept
+    redirect_to question_answers_path(params[:question_id])
+  end
 
   def set_answer
+    @question = Question.find(params[:question_id])
     @answer = Answer.find(params[:id])
-    @answer.current_user = current_user
   end
 
   private
@@ -109,10 +80,10 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:description)
   end
 
-	def same_user
-		if @answer.user_id != current_user.id
-			flash[:danger] = "You dont have privileges to perform this action"
-			redirect_to question_answers_path(@answer.question_id)
-		end
-	end
+  def check_same_user
+    return if same_user?(@answer.user_id)
+
+    flash[:danger] = 'You dont have privileges to perform this action'
+    redirect_to question_answers_path(@answer.question_id)
+  end
 end

@@ -10,7 +10,7 @@
       <table class="pull-center">
         <tr>
 
-        <% if @question.user_has_right_to_vote? %>
+        <% if @question.can_be_voted?(current_user) %>
         <td>
       <span class="text-center">
         <%= link_to like_question_path(@question),class:"like",method: :put do %>
@@ -28,7 +28,7 @@
       </span>
       </td>
       <% end %>
-      <% if @question.user_has_right_to_answer? %>
+      <% if @question.can_be_answered?(current_user) %>
         <td>
     	<%= link_to  "Click here to answer",new_question_answer_path(@question), class: 'btn btn-primary pull-right' %>
       </td>
@@ -65,7 +65,7 @@
               <span class="badge badge-success">Answer Accepted</span>
               <% end %>
               </td>
-            <% if @question.user_has_right_to_vote? %>
+            <% if @question.can_be_voted?(current_user) %>
             <td>
          <span class="text-center">
                <%= link_to like_question_answer_path(@question.id,answer),class:"like",method: :put do %>
@@ -88,7 +88,7 @@
       <%= link_to  "Edit",edit_question_answer_path(@question,answer), class: 'btn btn-info text-right' %>
               </td>
               <td>
-      <%= link_to  "Delete",question_answer_path(@question,answer),method: :delete, data:{confirm:'Are you sure to delete Question?'}, class: 'btn btn-danger text-right' %>
+      <%= link_to  "Delete",question_answer_path(@question,answer),method: :delete, data:{confirm:'Are you sure to delete Answer?'}, class: 'btn btn-danger text-right' %>
             </td>
       <% if @question.user_id == current_user.id %>
       <td>

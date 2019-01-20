@@ -4,9 +4,10 @@
   <%= link_to "Ask Question",new_question_path,class: "btn btn-primary btn-lg" %>
 </div>
  <div class="my-3 p-3 bg-white rounded box-shadow">
+   <div class="col-md-12">
         <h6 class="border-bottom border-gray pb-2 mb-0">Questions</h6>
-        <%= will_paginate @questions %>
         <%= render 'questions/questiondisplay', obj: @questions %>
         <%= will_paginate @questions %>
+      </div>
       </div>
 </div>

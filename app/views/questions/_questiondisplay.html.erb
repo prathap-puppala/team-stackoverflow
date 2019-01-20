@@ -1,7 +1,9 @@
-<% obj.each do |question| %>
-        <div class="media text-muted pt-3">
-          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-            <div class="d-flex justify-content-between align-items-center w-100">
+  <table width="100%" cellpadding="15">
+    <% obj.each do |question| %>
+
+                <tr style='border-bottom:1px solid black; '>
+                  <td width="10%">
+              <% if question.can_be_voted?(current_user) %>
               <span class="row">
               <span class="text-center">
                 <%= link_to like_question_path(question),class:"like",method: :put do %>
@@ -17,6 +19,9 @@
                 <h3><%= question.down_vote_count %></h3>
               </span>
             </span>
+            <% end %>
+            </td>
+            <td>
             <span>
              <%= link_to question.subject, question_path(question), class:'text-gray-dark' %>
              <br>
@@ -28,8 +33,9 @@
               <% end %>
             </span>
               </span>
+                </td>
+                <td>
               <span>
-
               <% if question.status_code_id ==3 %>
               <span class="badge badge-warning">Question Closed</span>
               <% elsif question.status_code_id ==2 %>
@@ -42,8 +48,7 @@
               <%= link_to 'Close', close_question_path(question),method: :put, data:{confirm:'Are you sure?'}, class: 'btn btn-danger' %>
               <% end %>
             </span>
-
-            </div>
-          </div>
-        </div>
+            </td>
+            </tr>
         <% end %>
+</table>

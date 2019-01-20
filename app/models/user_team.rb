@@ -5,8 +5,4 @@ class UserTeam < ApplicationRecord
 	belongs_to :team_admin, optional: true
 	attr_accessor :current_user
 
-	def filled?
-		current_user.user_teams.empty?
-	end
-
 end

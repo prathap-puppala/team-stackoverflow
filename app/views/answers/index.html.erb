@@ -12,10 +12,10 @@
   	<div class="card-header">
   <%= @answers.count %> Answers</div>
     <ul class="list-group list-group-flush">
+      <%= will_paginate @answers %>
     	<% @answers.each do |answer| %>
     <li class="list-group-item"><%= answer.description %></li>
     	<% end %>
   </ul>
   </div>
 </div>
-
