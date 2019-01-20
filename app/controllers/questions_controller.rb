@@ -9,7 +9,11 @@ class QuestionsController < ApplicationController
 	end
 
 	def show
-		@answers = @question.answers
+		if !@question.can_we_display?
+			flash[:danger] = "You are not allowed to view this question"
+			redirect_to root_path
+		end
+		@answers = Answer.answers(@question.id)
 	end
 
 

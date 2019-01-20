@@ -7,6 +7,11 @@ class Answer < ApplicationRecord
 	attr_accessor :current_user
 
 
+	def self.answers(qsn_id)
+		Answer.where(question_id: qsn_id)
+	end
+
+
 def up_score
 	self.question[:ans_upvote_score]
 end

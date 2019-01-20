@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
 	before_action :check_user_filled_teams
   before_action :set_answer, only: [:show, :edit, :update, :destroy, :upvote, :downvote, :accept]
 	before_action :same_user, only: [:edit, :update, :destroy]
+
   def index
     @question = Question.find(params[:question_id])
     @answers = @question.answers.all
@@ -61,7 +62,7 @@ class AnswersController < ApplicationController
       @answer.up_vote_count = @question.upvote_count
       @answer.save
     end
-    redirect_to question_path(@question, @answer)
+    redirect_to question_path(@question)
   end
 
   def downvote
@@ -72,7 +73,7 @@ class AnswersController < ApplicationController
       @answer.save
     end
 
-    redirect_to question_path(@question, @answer)
+    redirect_to question_path(@question)
   end
 
 	def accept

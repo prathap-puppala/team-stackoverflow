@@ -29,7 +29,7 @@ class UserTeamsController < ApplicationController
 			current_user.user_teams.create!(team_id: i)
 		end
         flash[:success] = "Teams preferences has been saved successfully"
-        redirect_to edit_user_team_path(current_user)
+        redirect_to root_path
 	end
 
 	private

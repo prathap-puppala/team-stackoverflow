@@ -31,8 +31,6 @@
       </li>
 
 
-
-    </li>
   </ul>
   </div>
   <br>
@@ -53,6 +51,11 @@
 
         <table>
           <tr>
+            <td>
+              <% if @question.status_code_id ==2 %>
+              <span class="badge badge-success">Answer Accepted</span>
+              <% end %>
+              </td>
             <td>
          <span class="text-center">
                <%= link_to like_question_answer_path(@question.id,answer),class:"like",method: :put do %>
@@ -78,7 +81,7 @@
             </td>
       <% if @question.user_id == current_user.id %>
       <td>
-      <%= link_to  "Mark as Answer",accept_question_answer_path(@question.id,answer),method: :put, data:{confirm:'Are you sure to close Question?'}, class: 'btn btn-success text-right' %>
+      <%= link_to  "Mark as Answer",accept_question_answer_path(@question.id,answer),method: :put, data:{confirm:'Are you sure to Mark this answer?'}, class: 'btn btn-success text-right' %>
         </td>
         <% end %>
       </tr></table>

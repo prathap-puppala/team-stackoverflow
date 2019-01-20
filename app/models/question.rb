@@ -15,14 +15,31 @@ class Question < ApplicationRecord
 
 	UP_DOWN_SCORE = [SiteSetting.new.getvalue('question_up_score'), SiteSetting.new.getvalue('question_down_score')].freeze
 
-	def self.questions user
+	def self.questions(user, question_id = nil)
 		user_teams_list = User.teams_list(user)
-		questions = Question.where.not(status_code_id: 4)
-			questions.select do |question|
+		if question_id.present?
+			questions = Question.where(id: question_id)
+		else
+			questions = Question.all
+		end
+		Question.new.access_list questions, user_teams_list
+	end
+
+
+	def access_list questions, user_teams_list
+		questions.select do |question|
 				@team_ids = (question.question_accesses.pluck(:team_id));
-				!(@team_ids & user_teams_list).empty?
+				((!(@team_ids & user_teams_list).empty?) && question[:status_code_id].to_i!=4)
 			end
 	end
+
+
+ def can_we_display?
+	 	question_ref = Question.where(id: self[:id])
+	 	question = access_list question_ref,User.teams_list(user)
+		self[:id].to_i == question[0][:id].to_i unless question.empty?
+ end
+
 
 	def upvote
 		self.question_votes.create!(up_down_vote: UP_DOWN_SCORE[0], user_id:current_user.id)
