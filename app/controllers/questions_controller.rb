@@ -34,10 +34,12 @@ class QuestionsController < ApplicationController
 
   def edit
     @tags = @question.tags
+    @question.ans_downvote_score = @question.ans_downvote_score * -1
   end
 
   def create
     @question = current_user.questions.new(params_require)
+    @question.ans_downvote_score = @question.ans_downvote_score * -1
     if @question.save
       process_tags
       process_question_accesses
@@ -122,6 +124,8 @@ class QuestionsController < ApplicationController
   private
 
   def params_require
+    params[:question][:ans_downvote_score] =
+      params[:question][:ans_downvote_score].to_i * -1
     params.require(:question).permit(:subject,
                                      :description,
                                      :ans_upvote_score,

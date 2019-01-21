@@ -6,7 +6,8 @@ class Question < ApplicationRecord
   validates :description, presence: true
   validates :ans_upvote_score,
             presence: true,
-            numericality: { only_integer: true }
+            numericality: { greater_than_or_equal_to: 1,
+                            only_integer: true }
   validates :ans_downvote_score,
             presence: true,
             numericality: { only_integer: true }
@@ -63,16 +64,36 @@ class Question < ApplicationRecord
     question_votes.where(user_id: user.id).empty?
   end
 
-  def downvote(user)
-    question_votes.create!(user_id: user.id,
-                           up_down_vote: UP_DOWN_SCORE[1])
-    increment!(:down_vote_count, 1)
+  def user_upvoted?(user)
+    question_votes.where('user_id=? AND up_down_vote>0', "%#{user.id}%")
+  end
+
+  def user_downvoted?(user)
+    question_votes.where('user_id=? AND up_down_vote<=0', "%#{user.id}%")
   end
 
   def upvote(user)
-    question_votes.create!(user_id: user.id,
-                           up_down_vote: UP_DOWN_SCORE[0])
-    increment!(:up_vote_count, 1)
+    if user_not_voted?(user)
+      question_votes.create!(user_id: user.id,
+                             up_down_vote: UP_DOWN_SCORE[0])
+      increment!(:up_vote_count, 1)
+    elsif user_downvoted?(user)
+      decrement!(:down_vote_count)
+      increment!(:up_vote_count)
+      question_votes.first.update(up_down_vote: UP_DOWN_SCORE[0])
+    end
+  end
+
+  def downvote(user)
+    if user_not_voted?(user)
+      question_votes.create!(user_id: user.id,
+                             up_down_vote: UP_DOWN_SCORE[1])
+      increment!(:down_vote_count, 1)
+    elsif user_upvoted?(user)
+      decrement!(:up_vote_count)
+      increment!(:down_vote_count)
+      question_votes.first.update(up_down_vote: UP_DOWN_SCORE[1])
+    end
   end
 
   def tags
