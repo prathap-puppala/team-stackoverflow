@@ -122,6 +122,17 @@ class QuestionsController < ApplicationController
   private
 
   def params_require
+    if params['All'].to_i ==1
+      params['view_access'] = []
+      params['answer_access'] = []
+      params['vote_access'] = []
+      current_user.user_teams.each_with_index do |tea,index|
+        params['view_access'][index] = tea.team_id
+        params['answer_access'][index] = tea.team_id
+        params['vote_access'][index] = tea.team_id
+      end
+    end
+
     params.require(:question).permit(:subject,
                                      :description,
                                      :team_id)
