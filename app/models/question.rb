@@ -58,11 +58,11 @@ class Question < ApplicationRecord
   end
 
   def user_upvoted?(user)
-    question_votes.where('user_id=? AND up_down_vote>0', "%#{user.id}%")
+    question_votes.where('user_id=? AND up_down_vote>0', "#{user.id}").any?
   end
 
   def user_downvoted?(user)
-    question_votes.where('user_id=? AND up_down_vote<=0', "%#{user.id}%")
+    question_votes.where("user_id=? AND up_down_vote<=0", "#{user.id}").any?
   end
 
   def upvote(user)

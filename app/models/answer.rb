@@ -22,12 +22,12 @@ class Answer < ApplicationRecord
   end
 
   def user_upvoted?(user)
-    answer_votes.where('user_id=? AND up_down_vote>0', "%#{user.id}%")
+    answer_votes.where('user_id=? AND up_down_vote>0', "#{user.id}").any?
     # answer_votes.where(user_id: user.id, up_down_vote: upvote_score).empty?
   end
 
   def user_downvoted?(user)
-    answer_votes.where('user_id=? AND up_down_vote<=0', "%#{user.id}%")
+    answer_votes.where('user_id=? AND up_down_vote<=0', "#{user.id}").any?
     # answer_votes.where(user_id: user.id, up_down_vote: down_vote_score).empty?
   end
 
