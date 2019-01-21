@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_101530) do
+ActiveRecord::Schema.define(version: 2019_01_21_062727) do
 
   create_table "answer_votes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
@@ -70,8 +70,6 @@ ActiveRecord::Schema.define(version: 2019_01_14_101530) do
     t.bigint "team_id"
     t.string "subject"
     t.text "description"
-    t.integer "ans_upvote_score", limit: 2
-    t.integer "ans_downvote_score", limit: 2
     t.integer "up_vote_count", default: 0
     t.integer "down_vote_count", default: 0
     t.bigint "status_code_id", default: 1

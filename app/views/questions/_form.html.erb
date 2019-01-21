@@ -34,23 +34,6 @@
             <li class="list-group-item">
                 <div class="form-group">
                     <br><br>
-                    <%= f.label :ans_upvote_score %><br>
-                    <%= f.text_field :ans_upvote_score,class:'form-control' %><br>
-                </div>
-            </li>
-
-            <li class="list-group-item">
-                <div class="form-group">
-                    <br><br>
-                    <%= f.label :ans_downvote_score %><br>
-                    <%= f.text_field :ans_downvote_score,class:'form-control' %><br>
-                </div>
-            </li>
-
-
-            <li class="list-group-item">
-                <div class="form-group">
-                    <br><br>
                     <%= f.label :Under_Which_Category_you_want_to_post_this_question %><br>
              <%= f.select(:team_id, options_for_select(current_user.user_teams.collect{|p| [p.team.team_name,p.team.id]}, obj.team_id),{include_blank: true},{:class => 'form-control', :required => true}) %><br>
                 </div>

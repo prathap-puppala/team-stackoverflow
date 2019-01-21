@@ -3,6 +3,8 @@
 # site_settings data
 SiteSetting.create(key: 'question_up_score',value: 10)
 SiteSetting.create(key: 'question_down_score', value: -5)
+SiteSetting.create(key: 'answer_up_score', value: 10)
+SiteSetting.create(key: 'answer_down_score', value: -5)
 
 # status_codes data
 StatusCode.create(name: 'opened')
@@ -46,15 +48,11 @@ SAMPLE_QUESTIONS = [
   'What are transaction logs, and how are they used?'
 ].freeze
 
-answer_up_down_vote_score = [10, 5]
-
 SAMPLE_QUESTIONS.each_with_index do |question, index|
   # questions data
   Question.create(user_id: 1,
                   subject: question,
                   description: question,
-                  ans_upvote_score: answer_up_down_vote_score[0],
-                  ans_downvote_score: answer_up_down_vote_score[1],
                   up_vote_count: 0,
                   down_vote_count: 0,
                   team_id: (index % 4) + 1)

@@ -4,13 +4,6 @@
 class Question < ApplicationRecord
   validates :subject, presence: true
   validates :description, presence: true
-  validates :ans_upvote_score,
-            presence: true,
-            numericality: { greater_than_or_equal_to: 1,
-                            only_integer: true }
-  validates :ans_downvote_score,
-            presence: true,
-            numericality: { only_integer: true }
 
   has_many :answers, dependent: :destroy
   belongs_to :user
