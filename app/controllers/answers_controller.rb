@@ -12,7 +12,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answers = @question.answers.paginate(
       page: params[:page],
-      per_page: 1
+      per_page: 10
     )
   end
 
@@ -35,10 +35,16 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = current_user.answers.create!(question_id: @question.id,
-                                           description: params[:answer][:description])
-    redirect_to question_answer_path(@question, @answer)
-    flash[:success] = 'Answer Submission successful'
+    @answer = current_user.answers.new(params_require)
+    @answer.question_id = @question.id
+    if @answer.save
+      @answer = current_user.answers.create(question_id: @question.id,
+                                    description: params[:answer][:description])
+      flash[:success] = 'Answer Submission successful'
+      redirect_to question_answer_path(@question, @answer)
+    else
+      render 'new'
+    end
   end
 
   def update
@@ -63,7 +69,7 @@ class AnswersController < ApplicationController
 
   def accept
     flash[:danger] = 'You cannot perform this action' if
-    @question.user_id != current_user.id
+    @question.user_id != current_user.id && @question.status_code_id != 2
 
     flash[:success] = 'Answer marked as successfully' if @answer.accept
     redirect_to question_answers_path(params[:question_id])

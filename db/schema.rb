@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2019_01_21_062727) do
     t.text "description"
     t.integer "up_vote_count", default: 0
     t.integer "down_vote_count", default: 0
-    t.boolean "status"
+    t.boolean "status", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "fk_rails_3d5ed4418f"

@@ -6,7 +6,7 @@ class Answer < ApplicationRecord
 
   belongs_to :user
   belongs_to :question
-  has_many :answer_votes
+  has_many :answer_votes, dependent: :destroy
 
   UP_DOWN_SCORE = [
     SiteSetting.getvalue('answer_up_score'),

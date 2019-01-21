@@ -39,10 +39,14 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.questions.new(params_require)
     if @question.save
-      process_tags
-      process_question_accesses
-      flash[:success] = 'Question added successfully'
-      redirect_to root_path
+      if process_tags
+        if process_question_accesses
+          flash[:success] = 'Question added successfully'
+          redirect_to root_path
+        end
+      else
+        flash[:danger] = 'Minimum one tag is required'
+      end
     else
       render 'new'
     end
@@ -52,15 +56,19 @@ class QuestionsController < ApplicationController
     @question.update(params_require)
     @question.destroy_tags
     @question.destroy_question_accesses
-    process_tags
-    process_question_accesses
-    flash[:success] = 'Question updated successfully'
+    if process_tags
+      if process_question_accesses
+        flash[:success] = 'Question updated successfully'
+      end
+    else
+      flash[:danger] = 'Minimum one tag is required'
+    end
     redirect_to question_path(@question)
   end
 
   def process_tags
     @tags = params['hidden-tags'].split(',')
-    return if @tags.empty?
+    return false if @tags.empty?
 
     @tag = nil
     @tags.each do |i|
@@ -68,6 +76,7 @@ class QuestionsController < ApplicationController
       @tag ||= Tag.create(name: i)
       @question.question_tags.create!(tag_id: @tag.id)
     end
+    true
   end
 
   def process_question_accesses
@@ -77,7 +86,7 @@ class QuestionsController < ApplicationController
       end
     else
       flash[:danger] = 'View Level is minimum'
-      render 'new'
+      return false
     end
 
     if params.key?(:answer_access)
@@ -93,6 +102,7 @@ class QuestionsController < ApplicationController
       QuestionAccess.where(question_id: @question.id,
                            team_id: i). update_all(vote_access: true)
     end
+    return true
   end
 
   def downvote

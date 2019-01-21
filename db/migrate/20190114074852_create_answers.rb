@@ -6,7 +6,7 @@ class CreateAnswers < ActiveRecord::Migration[5.2]
       t.text :description
       t.integer :up_vote_count, default: 0
       t.integer :down_vote_count, default: 0
-      t.boolean :status
+      t.boolean :status, default: false
       t.timestamps
     end
     add_foreign_key :answers, :users

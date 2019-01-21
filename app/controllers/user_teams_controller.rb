@@ -11,10 +11,15 @@ class UserTeamsController < ApplicationController
   end
 
   def create
-    params[:user_teams].each do |i|
-      current_user.user_teams.create!(team_id: i)
+    if !params[:user_teams].present?
+      params[:user_teams].each do |i|
+        current_user.user_teams.create!(team_id: i)
+      end
+      flash[:success] = 'Teams preferences has been saved successfully'
+    else
+      flash[:danger] = 'Teams preferences cannot be null'
     end
-    flash[:success] = 'Teams preferences has been saved successfully'
+
     redirect_to questions_path
   end
 
@@ -26,10 +31,14 @@ class UserTeamsController < ApplicationController
   def update
     @user_team_access = current_user.user_teams
     @user_team_access.destroy_all
-    params[:user_teams].each do |i|
-      current_user.user_teams.create!(team_id: i)
+    if params[:user_teams].present?
+      params[:user_teams].each do |i|
+        current_user.user_teams.create!(team_id: i)
+      end
+      flash[:success] = 'Teams preferences has been saved successfully'
+    else
+      flash[:danger] = 'Teams preferences cannot be null'
     end
-    flash[:success] = 'Teams preferences has been saved successfully'
     redirect_to root_path
   end
 
