@@ -112,4 +112,43 @@ class Question < ApplicationRecord
   def destroy
     update(status_code_id: 4)
   end
+
+  def process_question_accesses(params)
+    if params.key?(:view_access)
+      params[:view_access].each do |i|
+        question_accesses.create!(team_id: i)
+      end
+    else
+      flash[:danger] = 'View Level is minimum'
+      return false
+    end
+
+    if params.key?(:answer_access)
+      params[:answer_access].each do |i|
+        QuestionAccess.where(question_id: id,
+                             team_id: i).update_all(answer_access: true)
+      end
+    end
+
+    return unless params.key?(:vote_access)
+
+    params[:vote_access].each do |i|
+      QuestionAccess.where(question_id: id,
+                           team_id: i). update_all(vote_access: true)
+    end
+    true
+  end
+
+  def process_tags(params)
+    tags = params['hidden-tags'].split(',')
+    return false if tags.empty?
+
+    tag = nil
+    tags.each do |i|
+      tag = Tag.find_by(name: i)
+      tag ||= Tag.create(name: i)
+      question_tags.create!(tag_id: tag.id)
+    end
+    true
+  end
 end

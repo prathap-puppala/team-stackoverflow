@@ -39,8 +39,8 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.questions.new(params_require)
     if @question.save
-      if process_tags
-        if process_question_accesses
+      if @question.process_tags(params)
+        if @question.process_question_accesses(params)
           flash[:success] = 'Question added successfully'
           redirect_to root_path
         end
@@ -56,53 +56,14 @@ class QuestionsController < ApplicationController
     @question.update(params_require)
     @question.destroy_tags
     @question.destroy_question_accesses
-    if process_tags
-      if process_question_accesses
+    if @question.process_tags(params)
+      if @question.process_question_accesses(params)
         flash[:success] = 'Question updated successfully'
       end
     else
       flash[:danger] = 'Minimum one tag is required'
     end
     redirect_to question_path(@question)
-  end
-
-  def process_tags
-    @tags = params['hidden-tags'].split(',')
-    return false if @tags.empty?
-
-    @tag = nil
-    @tags.each do |i|
-      @tag = Tag.find_by(name: i)
-      @tag ||= Tag.create(name: i)
-      @question.question_tags.create!(tag_id: @tag.id)
-    end
-    true
-  end
-
-  def process_question_accesses
-    if params.key?(:view_access)
-      params[:view_access].each do |i|
-        @question.question_accesses.create!(team_id: i)
-      end
-    else
-      flash[:danger] = 'View Level is minimum'
-      return false
-    end
-
-    if params.key?(:answer_access)
-      params[:answer_access].each do |i|
-        QuestionAccess.where(question_id: @question.id,
-                             team_id: i).update_all(answer_access: true)
-      end
-    end
-
-    return unless params.key?(:vote_access)
-
-    params[:vote_access].each do |i|
-      QuestionAccess.where(question_id: @question.id,
-                           team_id: i). update_all(vote_access: true)
-    end
-    return true
   end
 
   def downvote
@@ -132,17 +93,11 @@ class QuestionsController < ApplicationController
   private
 
   def params_require
-    if params['All'].to_i ==1
-      params['view_access'] = []
-      params['answer_access'] = []
-      params['vote_access'] = []
-      current_user.user_teams.each_with_index do |tea,index|
-        params['view_access'][index] = tea.team_id
-        params['answer_access'][index] = tea.team_id
-        params['vote_access'][index] = tea.team_id
-      end
+    if params[:all].to_i == 1
+      params[:view_access] = current_user.team_ids
+      params[:answer_access] = current_user.team_ids
+      params[:vote_access] = current_user.team_ids
     end
-
     params.require(:question).permit(:subject,
                                      :description,
                                      :team_id)
